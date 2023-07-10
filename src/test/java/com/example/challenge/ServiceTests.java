@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -25,9 +26,35 @@ public class ServiceTests {
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.of(1));
         when(planetDataSource.save(any())).thenReturn(2);
 
-        int id = planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+        Optional<Integer> id = planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
 
-        assertThat(id).isEqualTo(2);
+        assertThat(id.get()).isEqualTo(2);
         verify(planetDataSource).save(new PlanetDataModel("TestName", "TestClimate", "TestTerrain", 1));
+    }
+
+    @Test
+    public void shouldReturnEmptyIdIfNotFound() {
+        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        StarWarApiService starWarApiService = mock(StarWarApiService.class);
+        PlanetService planetService = new PlanetService(planetDataSource, starWarApiService);
+        when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
+        when(planetDataSource.save(any())).thenReturn(2);
+
+        Optional<Integer> id = planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+
+        assertThat(id.isPresent()).isFalse();
+    }
+
+    @Test
+    public void shouldNotSaveIfPlanetIsNotFound() {
+        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        StarWarApiService starWarApiService = mock(StarWarApiService.class);
+        PlanetService planetService = new PlanetService(planetDataSource, starWarApiService);
+        when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
+        when(planetDataSource.save(any())).thenReturn(2);
+
+        planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+
+        verifyNoInteractions(planetDataSource);
     }
 }

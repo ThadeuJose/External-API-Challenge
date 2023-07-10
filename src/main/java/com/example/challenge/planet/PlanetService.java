@@ -1,5 +1,7 @@
 package com.example.challenge.planet;
 
+import java.util.Optional;
+
 import com.example.challenge.StarWarApiService;
 
 public class PlanetService {
@@ -12,11 +14,19 @@ public class PlanetService {
         this.starWarApiService = starWarApiService;
     }
 
-    public int createPlanet(PlanetRequest planetRequest) {
+    public Optional<Integer> createPlanet(PlanetRequest planetRequest) {
         String name = planetRequest.getName();
-        int amountCameo = starWarApiService.getAmountCameo(name).get();
-        return planetDataSource
-                .save(new PlanetDataModel(name, planetRequest.getClimate(), planetRequest.getTerrain(), amountCameo));
+        Optional<Integer> amountCameo = starWarApiService.getAmountCameo(name);
+        if (amountCameo.isPresent()) {
+            PlanetDataModel planetDataModel = new PlanetDataModel(
+                    name,
+                    planetRequest.getClimate(),
+                    planetRequest.getTerrain(),
+                    amountCameo.get());
+            int id = planetDataSource.save(planetDataModel);
+            return Optional.of(id);
+        }
+        return Optional.empty();
     }
 
 }

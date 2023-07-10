@@ -1,5 +1,6 @@
 package com.example.challenge;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -7,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import com.example.challenge.planet.PlanetService;
 import com.google.gson.Gson;
 
 @WebMvcTest(PlanetController.class)
-public class IntegrationTests {
+public class EndpointTests {
 
     private static final String APPLICATION_JSON = "application/json;charset=UTF-8";
 
@@ -32,7 +35,7 @@ public class IntegrationTests {
 
     @Test
     public void shouldCreatePlanetAndReturnCorrectUrl() throws Exception {
-        when(planetService.createPlanet(any())).thenReturn(3);
+        when(planetService.createPlanet(any())).thenReturn(Optional.of(3));
 
         Gson gson = new Gson();
         String json = gson.toJson(new PlanetRequest("TestName", "TestClima", "TestTerreno"));
@@ -41,5 +44,20 @@ public class IntegrationTests {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", containsString("/3")));
+    }
+
+    @Test
+    public void shouldReturnErrorIfPlanetisNotFound() throws Exception {
+        when(planetService.createPlanet(any())).thenReturn(Optional.empty());
+
+        Gson gson = new Gson();
+        String json = gson.toJson(new PlanetRequest("7", "TestClima","TestTerreno"));
+
+        String message = this.mockMvc.perform(post("/planet").contentType(APPLICATION_JSON).content(json).accept(APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isBadGateway())
+        .andReturn().getResponse().getContentAsString();
+
+        assertThat(message).contains("Can't find planet with name 7");        
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.challenge.planet.PlanetDataSource;
 import com.example.challenge.planet.PlanetService;
+import com.example.challenge.planet.PlanetUseCase;
 
 @Configuration
 public class AppConfig {
@@ -19,7 +20,12 @@ public class AppConfig {
     }
 
     @Bean
-    public PlanetService planetService(PlanetDataSource planetDataSource, StarWarApiService starWarApiService) {
-        return new PlanetService(planetDataSource, starWarApiService);
+    public PlanetUseCase planetUseCase(PlanetDataSource planetDataSource, StarWarApiService starWarApiService) {
+        return new PlanetUseCase(planetDataSource, starWarApiService);
+    }
+
+    @Bean
+    public PlanetService planetService(PlanetUseCase planetUseCase) {
+        return new PlanetService(planetUseCase);
     }
 }

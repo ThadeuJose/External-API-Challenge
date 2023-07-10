@@ -14,12 +14,15 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.challenge.planet.PlanetController;
 import com.example.challenge.planet.PlanetRequest;
 import com.example.challenge.planet.PlanetService;
+import com.example.challenge.planet.PlanetUseCase;
 import com.google.gson.Gson;
 
 @WebMvcTest(PlanetController.class)
@@ -31,11 +34,19 @@ public class EndpointTests {
     private MockMvc mockMvc;
 
     @MockBean
-    PlanetService planetService;
+    PlanetUseCase planetUseCase;
+
+    @TestConfiguration
+    public static class TestConfig {
+        @Bean
+        public PlanetService testHelper(PlanetUseCase planetUseCase) {
+            return new PlanetService(planetUseCase);
+        }
+    }
 
     @Test
     public void shouldCreatePlanetAndReturnCorrectUrl() throws Exception {
-        when(planetService.createPlanet(any())).thenReturn(Optional.of(3));
+        when(planetUseCase.createPlanet(any())).thenReturn(Optional.of(3));
 
         Gson gson = new Gson();
         String json = gson.toJson(new PlanetRequest("TestName", "TestClima", "TestTerreno"));
@@ -48,7 +59,7 @@ public class EndpointTests {
 
     @Test
     public void shouldReturnErrorIfPlanetisNotFound() throws Exception {
-        when(planetService.createPlanet(any())).thenReturn(Optional.empty());
+        when(planetUseCase.createPlanet(any())).thenReturn(Optional.empty());
 
         Gson gson = new Gson();
         String json = gson.toJson(new PlanetRequest("7", "TestClima","TestTerreno"));

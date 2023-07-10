@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.example.challenge.planet.PlanetDataModel;
 import com.example.challenge.planet.PlanetDataSource;
 import com.example.challenge.planet.PlanetRequest;
-import com.example.challenge.planet.PlanetService;
+import com.example.challenge.planet.PlanetUseCase;
 
 public class ServiceTests {
 
@@ -22,11 +22,11 @@ public class ServiceTests {
     public void shouldReturnId() {
         PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
-        PlanetService planetService = new PlanetService(planetDataSource, starWarApiService);
+        PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.of(1));
         when(planetDataSource.save(any())).thenReturn(2);
 
-        Optional<Integer> id = planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+        Optional<Integer> id = planetUseCase.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
 
         assertThat(id.get()).isEqualTo(2);
         verify(planetDataSource).save(new PlanetDataModel("TestName", "TestClimate", "TestTerrain", 1));
@@ -36,11 +36,11 @@ public class ServiceTests {
     public void shouldReturnEmptyIdIfNotFound() {
         PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
-        PlanetService planetService = new PlanetService(planetDataSource, starWarApiService);
+        PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
         when(planetDataSource.save(any())).thenReturn(2);
 
-        Optional<Integer> id = planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+        Optional<Integer> id = planetUseCase.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
 
         assertThat(id.isPresent()).isFalse();
     }
@@ -49,11 +49,11 @@ public class ServiceTests {
     public void shouldNotSaveIfPlanetIsNotFound() {
         PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
-        PlanetService planetService = new PlanetService(planetDataSource, starWarApiService);
+        PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
         when(planetDataSource.save(any())).thenReturn(2);
 
-        planetService.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
+        planetUseCase.createPlanet(new PlanetRequest("TestName", "TestClimate", "TestTerrain"));
 
         verifyNoInteractions(planetDataSource);
     }

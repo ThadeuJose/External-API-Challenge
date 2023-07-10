@@ -1,32 +1,28 @@
 package com.example.challenge.planet;
 
+import java.net.URI;
 import java.util.Optional;
 
-import com.example.challenge.StarWarApiService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class PlanetService {
+    private PlanetUseCase planetUseCase;
 
-    PlanetDataSource planetDataSource;
-    StarWarApiService starWarApiService;
-
-    public PlanetService(PlanetDataSource planetDataSource, StarWarApiService starWarApiService) {
-        this.planetDataSource = planetDataSource;
-        this.starWarApiService = starWarApiService;
+    public PlanetService(PlanetUseCase planetUseCase) {
+        this.planetUseCase = planetUseCase;
     }
 
-    public Optional<Integer> createPlanet(PlanetRequest planetRequest) {
-        String name = planetRequest.getName();
-        Optional<Integer> amountCameo = starWarApiService.getAmountCameo(name);
-        if (amountCameo.isPresent()) {
-            PlanetDataModel planetDataModel = new PlanetDataModel(
-                    name,
-                    planetRequest.getClimate(),
-                    planetRequest.getTerrain(),
-                    amountCameo.get());
-            int id = planetDataSource.save(planetDataModel);
-            return Optional.of(id);
+    public ResponseEntity<Object> createPlanet(@RequestBody PlanetRequest planetRequest) {
+        Optional<Integer> id = planetUseCase.createPlanet(planetRequest);
+        if (id.isPresent()) {
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id.get()).toUri();
+            return ResponseEntity.created(uri).build();
         }
-        return Optional.empty();
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                .body("Can't find planet with name " + planetRequest.getName());
     }
 
 }

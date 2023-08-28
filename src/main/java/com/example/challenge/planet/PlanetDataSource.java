@@ -2,6 +2,7 @@ package com.example.challenge.planet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PlanetDataSource {
 
@@ -16,6 +17,10 @@ public class PlanetDataSource {
         planets.add(new PlanetDataModel("Endor", "Temperate", "Forested moon", 3));
         return planets;
 
+    }
+
+    public Optional<PlanetDataModel> getPlanetById(Long id) {
+        return Optional.empty();
     }
 
 }

@@ -36,4 +36,12 @@ public class PlanetService {
         return planets;
     }
 
+    public ResponseEntity<PlanetResponse> getPlanetById(Long id) {
+        Optional<PlanetResponse> planetResponse = planetUseCase.getPlanetById(id);
+        if (planetResponse.isPresent()) {
+            return ResponseEntity.ok(planetResponse.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

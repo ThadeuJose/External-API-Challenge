@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +26,10 @@ public class PlanetController {
     @GetMapping(path = "planets")
     public List<PlanetResponse> getPlanets() {
         return planetService.getAllPlanets();
+    }
+
+    @GetMapping(path = "planets/{id}")
+    public ResponseEntity<PlanetResponse> getPlanetById(@PathVariable Long id) {
+        return planetService.getPlanetById(id);
     }
 }

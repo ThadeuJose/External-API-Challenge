@@ -37,4 +37,10 @@ public class PlanetUseCase {
         }).toList();
     }
 
+    public Optional<PlanetResponse> getPlanetById(long id) {
+        return planetDataSource.getPlanetById(id)
+                .map(element -> new PlanetResponse(element.getName(), element.getClimate(), element.getTerrain(),
+                        element.getAmountCameo()));
+    }
+
 }

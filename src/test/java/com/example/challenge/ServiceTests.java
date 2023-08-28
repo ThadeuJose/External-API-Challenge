@@ -2,6 +2,7 @@ package com.example.challenge;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -82,5 +83,36 @@ public class ServiceTests {
         planetResponses.add(new PlanetResponse("Endor", "Temperate", "Forested moon", 3));
 
         assertThat(allPlanets).hasSameElementsAs(planetResponses);
+    }
+
+    @Test
+    public void shouldGetPlanetById() {
+        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        StarWarApiService starWarApiService = mock(StarWarApiService.class);
+        PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
+
+        PlanetDataModel planet = new PlanetDataModel("Tatooine", "Arid", "Desert", 3);
+
+        when(planetDataSource.getPlanetById(anyLong())).thenReturn(Optional.of(planet));
+
+        Optional<PlanetResponse> actual = planetUseCase.getPlanetById(1);
+
+        PlanetResponse expected = new PlanetResponse("Tatooine", "Arid", "Desert", 3);
+
+        assertThat(actual.isPresent()).isTrue();
+        assertThat(expected).isEqualTo(actual.get());
+    }
+
+    @Test
+    public void shouldGetEmptyIfDontFind() {
+        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        StarWarApiService starWarApiService = mock(StarWarApiService.class);
+        PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
+
+        when(planetDataSource.getPlanetById(anyLong())).thenReturn(Optional.empty());
+
+        Optional<PlanetResponse> actual = planetUseCase.getPlanetById(1);
+
+        assertThat(actual.isPresent()).isFalse();
     }
 }

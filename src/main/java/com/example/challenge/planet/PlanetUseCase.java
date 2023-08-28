@@ -1,5 +1,6 @@
 package com.example.challenge.planet;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.challenge.StarWarApiService;
@@ -27,6 +28,13 @@ public class PlanetUseCase {
             return Optional.of(id);
         }
         return Optional.empty();
+    }
+
+    public List<PlanetResponse> getAllPlanets() {
+        return planetDataSource.getAllPlanets().stream().map(element -> {
+            return new PlanetResponse(element.getName(), element.getClimate(), element.getTerrain(),
+                    element.getAmountCameo());
+        }).toList();
     }
 
 }

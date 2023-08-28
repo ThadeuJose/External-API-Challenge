@@ -1,6 +1,8 @@
 package com.example.challenge.planet;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,15 @@ public class PlanetService {
         }
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                 .body("Can't find planet with name " + planetRequest.getName());
+    }
+
+    public List<PlanetResponse> getAllPlanets() {
+        List<PlanetResponse> planets = new ArrayList<>();
+        planets.add(new PlanetResponse("Tatooine", "Arid", "Desert", 3));
+        planets.add(new PlanetResponse("Hoth", "Frozen", "Ice plains", 4));
+        planets.add(new PlanetResponse("Endor", "Temperate", "Forested moon", 3));
+
+        return planets;
     }
 
 }

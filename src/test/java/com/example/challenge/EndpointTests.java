@@ -71,4 +71,5 @@ public class EndpointTests {
 
         assertThat(message).contains("Can't find planet with name 7");        
     }
+
 }

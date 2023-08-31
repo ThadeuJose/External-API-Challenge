@@ -43,4 +43,8 @@ public class PlanetUseCase {
                         element.getAmountCameo()));
     }
 
+    public List<PlanetResponse> getPlanetsByName(String name) {
+        return planetDataSource.getPlanetsByName(name);
+    }
+
 }

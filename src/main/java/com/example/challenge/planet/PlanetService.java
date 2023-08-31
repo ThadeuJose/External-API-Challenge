@@ -1,7 +1,6 @@
 package com.example.challenge.planet;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,12 +27,7 @@ public class PlanetService {
     }
 
     public List<PlanetResponse> getAllPlanets() {
-        List<PlanetResponse> planets = new ArrayList<>();
-        planets.add(new PlanetResponse("Tatooine", "Arid", "Desert", 3));
-        planets.add(new PlanetResponse("Hoth", "Frozen", "Ice plains", 4));
-        planets.add(new PlanetResponse("Endor", "Temperate", "Forested moon", 3));
-
-        return planets;
+        return planetUseCase.getAllPlanets();
     }
 
     public ResponseEntity<PlanetResponse> getPlanetById(Long id) {
@@ -42,6 +36,10 @@ public class PlanetService {
             return ResponseEntity.ok(planetResponse.get());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    public List<PlanetResponse> getPlanetsByName(String name) {
+        return planetUseCase.getPlanetsByName(name);
     }
 
 }

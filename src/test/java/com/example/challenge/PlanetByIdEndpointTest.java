@@ -53,7 +53,7 @@ public class PlanetByIdEndpointTest {
     public void shouldReturnPlanetById() throws Exception {
         PlanetResponse planets = new PlanetResponse("Tatooine", "Arid", "Desert", 3);
 
-        when(planetUseCase.getPlanetById(anyLong())).thenReturn(Optional.of(planets));
+        when(planetUseCase.getPlanetById(1)).thenReturn(Optional.of(planets));
 
         String json = this.mockMvc.perform(get("/planets/1"))
                 .andDo(print())

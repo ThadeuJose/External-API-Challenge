@@ -1,6 +1,7 @@
 package com.example.challenge.planet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,10 @@ public class PlanetDataSource {
 
     public Optional<PlanetDataModel> getPlanetById(Long id) {
         return Optional.empty();
+    }
+
+    public List<PlanetResponse> getPlanetsByName(String name) {
+        return Collections.emptyList();
     }
 
 }

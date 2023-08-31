@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -17,15 +16,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.challenge.planet.AllPlanetListResponse;
 import com.example.challenge.planet.PlanetController;
 import com.example.challenge.planet.PlanetResponse;
 import com.example.challenge.planet.PlanetService;
 import com.example.challenge.planet.PlanetUseCase;
+import com.example.challenge.planet.QueriedPlanetListResponse;
 import com.google.gson.Gson;
 
 @WebMvcTest(PlanetController.class)
-public class ListPlanetEndpointTest {
+public class PlanetByNameEndpointTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,29 +41,22 @@ public class ListPlanetEndpointTest {
     }
 
     @Test
-    public void shouldReturnListOfPlanet() throws Exception {
-        List<PlanetResponse> planets = new ArrayList<>();
-        planets.add(new PlanetResponse("Tatooine", "Arid", "Desert", 3));
-        planets.add(new PlanetResponse("Hoth", "Frozen", "Ice plains", 4));
-        planets.add(new PlanetResponse("Endor", "Temperate", "Forested moon", 3));
+    public void shouldReturnPlanetsByName() throws Exception {
+        PlanetResponse planets = new PlanetResponse("Tatooine", "Arid", "Desert", 3);
 
-        when(planetUseCase.getAllPlanets()).thenReturn(planets);
+        when(planetUseCase.getPlanetsByName("Tatooine")).thenReturn(List.of(planets));
 
-        String json = this.mockMvc.perform(get("/planets"))
+        String json = this.mockMvc.perform(get("/planets?name=Tatooine"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         Gson gson = new Gson();
-        AllPlanetListResponse expected = gson.fromJson(json, AllPlanetListResponse.class);
+        QueriedPlanetListResponse actual = gson.fromJson(json, QueriedPlanetListResponse.class);
 
-        List<PlanetResponse> planetsInResponse = new ArrayList<>();
-        planetsInResponse.add(new PlanetResponse("Tatooine", "Arid", "Desert", 3));
-        planetsInResponse.add(new PlanetResponse("Hoth", "Frozen", "Ice plains", 4));
-        planetsInResponse.add(new PlanetResponse("Endor", "Temperate", "Forested moon", 3));
+        QueriedPlanetListResponse expected = new QueriedPlanetListResponse(1,
+                List.of(new PlanetResponse("Tatooine", "Arid", "Desert", 3)), "Tatooine");
 
-        AllPlanetListResponse actual = new AllPlanetListResponse(planetsInResponse.size(), planetsInResponse);
-
-        assertThat(expected).isEqualTo(actual);
+        assertThat(actual).isEqualTo(expected);
     }
 }

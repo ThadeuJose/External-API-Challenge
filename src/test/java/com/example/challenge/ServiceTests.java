@@ -14,8 +14,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import com.example.challenge.database.FakePlanetDataSource;
 import com.example.challenge.planet.PlanetDataModel;
-import com.example.challenge.planet.PlanetDataSource;
 import com.example.challenge.planet.PlanetRequest;
 import com.example.challenge.planet.PlanetResponse;
 import com.example.challenge.planet.PlanetUseCase;
@@ -24,7 +24,7 @@ public class ServiceTests {
 
     @Test
     public void shouldReturnId() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.of(1));
@@ -38,7 +38,7 @@ public class ServiceTests {
 
     @Test
     public void shouldReturnEmptyIdIfNotFound() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
@@ -51,7 +51,7 @@ public class ServiceTests {
 
     @Test
     public void shouldNotSaveIfPlanetIsNotFound() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
         when(starWarApiService.getAmountCameo(any())).thenReturn(Optional.empty());
@@ -64,7 +64,7 @@ public class ServiceTests {
 
     @Test
     public void shouldGetListOfPlanet() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
 
@@ -87,7 +87,7 @@ public class ServiceTests {
 
     @Test
     public void shouldGetPlanetById() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
 
@@ -105,7 +105,7 @@ public class ServiceTests {
 
     @Test
     public void shouldGetEmptyIfDontFind() {
-        PlanetDataSource planetDataSource = mock(PlanetDataSource.class);
+        FakePlanetDataSource planetDataSource = mock(FakePlanetDataSource.class);
         StarWarApiService starWarApiService = mock(StarWarApiService.class);
         PlanetUseCase planetUseCase = new PlanetUseCase(planetDataSource, starWarApiService);
 

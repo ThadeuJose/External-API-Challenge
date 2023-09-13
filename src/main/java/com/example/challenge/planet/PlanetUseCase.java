@@ -44,7 +44,12 @@ public class PlanetUseCase {
     }
 
     public List<PlanetResponse> getPlanetsByName(String name) {
-        return planetDataSource.getPlanetsByName(name);
+        return planetDataSource.getPlanetsByName(name).stream().map(this::fromPlanetDataModelToPlanetResponse).toList();
+    }
+
+    private PlanetResponse fromPlanetDataModelToPlanetResponse(PlanetDataModel element) {
+        return new PlanetResponse(element.getName(), element.getClimate(), element.getTerrain(),
+                element.getAmountCameo());
     }
 
 }

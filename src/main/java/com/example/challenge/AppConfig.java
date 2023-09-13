@@ -3,6 +3,8 @@ package com.example.challenge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.example.challenge.database.PlanetRepository;
+import com.example.challenge.database.PostgreePlanetDataSource;
 import com.example.challenge.planet.PlanetDataSource;
 import com.example.challenge.planet.PlanetService;
 import com.example.challenge.planet.PlanetUseCase;
@@ -15,8 +17,8 @@ public class AppConfig {
     }
 
     @Bean
-    public PlanetDataSource planetDataSource() {
-        return new PlanetDataSource();
+    public PlanetDataSource planetDataSource(PlanetRepository repository) {
+        return new PostgreePlanetDataSource(repository);
     }
 
     @Bean

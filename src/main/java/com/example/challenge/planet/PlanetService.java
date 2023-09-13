@@ -42,4 +42,13 @@ public class PlanetService {
         return planetUseCase.getPlanetsByName(name);
     }
 
+    public ResponseEntity<PlanetResponse> deletePlanetById(Long id) {
+        Optional<PlanetResponse> planetResponse = planetUseCase.getPlanetById(id);
+        if (!planetResponse.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        planetUseCase.deletePlanetById(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

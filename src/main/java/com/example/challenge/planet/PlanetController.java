@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,4 +41,8 @@ public class PlanetController {
         return planetService.getPlanetById(id);
     }
 
+    @DeleteMapping(path = "planets/{id}")
+    public ResponseEntity<PlanetResponse> deletePlanetById(@PathVariable Long id) {
+        return planetService.deletePlanetById(id);
+    }
 }

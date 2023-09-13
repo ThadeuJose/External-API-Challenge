@@ -52,4 +52,8 @@ public class PlanetUseCase {
                 element.getAmountCameo());
     }
 
+    public void deletePlanetById(Long id) {
+        planetDataSource.removeById(id);
+    }
+
 }

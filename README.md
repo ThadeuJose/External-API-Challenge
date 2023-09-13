@@ -17,3 +17,11 @@ Funcionalidades implementadas:
     Buscar por nome
     Buscar por ID
     Remover planeta
+
+Documentação: 
+
+Open API
+    http://localhost:8080/api-docs
+
+Swagger
+    http://localhost:8080/swagger-ui/index.html

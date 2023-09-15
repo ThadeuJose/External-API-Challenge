@@ -51,7 +51,7 @@ public class EndpointTests {
         Gson gson = new Gson();
         String json = gson.toJson(new PlanetRequest("TestName", "TestClima", "TestTerreno"));
 
-        this.mockMvc.perform(post("/planet").contentType(APPLICATION_JSON).content(json).accept(APPLICATION_JSON))
+        this.mockMvc.perform(post("/planets").contentType(APPLICATION_JSON).content(json).accept(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", containsString("/3")));
@@ -64,7 +64,7 @@ public class EndpointTests {
         Gson gson = new Gson();
         String json = gson.toJson(new PlanetRequest("7", "TestClima","TestTerreno"));
 
-        String message = this.mockMvc.perform(post("/planet").contentType(APPLICATION_JSON).content(json).accept(APPLICATION_JSON))
+        String message = this.mockMvc.perform(post("/planets").contentType(APPLICATION_JSON).content(json).accept(APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isBadGateway())
         .andReturn().getResponse().getContentAsString();

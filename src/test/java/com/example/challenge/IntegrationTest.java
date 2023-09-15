@@ -27,13 +27,12 @@ public class IntegrationTest {
 
 	@Test
 	public void shouldCreateAndRemovePlanets() throws Exception {
-		String URL = "http://localhost:" + port + "/planet";
+		String URL = "http://localhost:" + port + "/planets";
 		this.restTemplate.postForEntity(URL, createRequest(), String.class);
 		this.restTemplate.postForEntity(URL, createRequest(), String.class);
 		this.restTemplate.postForEntity(URL, createRequest(), String.class);
 
-		AllPlanetListResponse response1 = this.restTemplate.getForObject("http://localhost:" + port + "/planets",
-				AllPlanetListResponse.class);
+		AllPlanetListResponse response1 = this.restTemplate.getForObject(URL, AllPlanetListResponse.class);
 
 		assertThat(response1.getTotal()).isEqualTo(3);
 

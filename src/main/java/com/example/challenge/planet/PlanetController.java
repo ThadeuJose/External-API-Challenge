@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(path = "planets")
 public class PlanetController {
 
     private PlanetService planetService;
@@ -21,12 +23,12 @@ public class PlanetController {
         this.planetService = planetService;
     }
 
-    @PostMapping(path = "planet", consumes = "application/json;charset=UTF-8")
+    @PostMapping(consumes = "application/json;charset=UTF-8")
     public ResponseEntity<Object> createPlanet(@RequestBody PlanetRequest planetRequest) {
         return planetService.createPlanet(planetRequest);
     }
 
-    @GetMapping(path = "planets")
+    @GetMapping
     public ResponseEntity<?> getPlanets(@RequestParam Optional<String> name) {
         if (name.isPresent()) {
             List<PlanetResponse> filterPlanets = planetService.getPlanetsByName(name.get());
@@ -36,12 +38,12 @@ public class PlanetController {
         return ResponseEntity.ok(new AllPlanetListResponse(allPlanets.size(), allPlanets));
     }
 
-    @GetMapping(path = "planets/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<PlanetResponse> getPlanetById(@PathVariable Long id) {
         return planetService.getPlanetById(id);
     }
 
-    @DeleteMapping(path = "planets/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<PlanetResponse> deletePlanetById(@PathVariable Long id) {
         return planetService.deletePlanetById(id);
     }

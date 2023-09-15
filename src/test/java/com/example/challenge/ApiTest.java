@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-public class ApiTests {
+public class ApiTest {
     @Test
     public void shouldReturnAmountOfCameo() {
         StarWarApiService starWarApiService = new StarWarApiService();

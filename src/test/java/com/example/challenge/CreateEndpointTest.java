@@ -26,7 +26,7 @@ import com.example.challenge.planet.PlanetUseCase;
 import com.google.gson.Gson;
 
 @WebMvcTest(PlanetController.class)
-public class EndpointTest {
+public class CreateEndpointTest {
 
     private static final String APPLICATION_JSON = "application/json;charset=UTF-8";
 

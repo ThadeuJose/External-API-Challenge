@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class PlanetService {
@@ -16,7 +15,7 @@ public class PlanetService {
         this.planetUseCase = planetUseCase;
     }
 
-    public ResponseEntity<Object> createPlanet(@RequestBody PlanetRequest planetRequest) {
+    public ResponseEntity<Object> createPlanet(PlanetRequest planetRequest) {
         Optional<Integer> id = planetUseCase.createPlanet(planetRequest);
         if (id.isPresent()) {
             URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id.get()).toUri();
